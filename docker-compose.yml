@@ -1,0 +1,44 @@
+version: '2'
+
+services:
+  server:
+    image: zabbix/zabbix-server-mysql:alpine-3.0-latest
+    environment:
+      DB_SERVER_HOST: mysql
+      MYSQL_DATABASE: zabbix
+      MYSQL_USER: zabbix
+      MYSQL_PASSWORD: secret
+      TZ: Asia/Tokyo
+
+  agent:
+    image: zabbix/zabbix-agent:alpine-3.0-latest
+    environment:
+      ZBX_HOSTNAME: zabbix-agent
+      ZBX_SERVER_HOST: server
+      TZ: Asia/Tokyo
+
+  www:
+    image: zabbix/zabbix-web-apache-mysql:alpine-3.0-latest
+    ports:
+      - 9876:80
+    environment:
+      DB_SERVER_HOST: mysql
+      MYSQL_DATABASE: zabbix
+      MYSQL_USER: zabbix
+      MYSQL_PASSWORD: secret
+      ZBX_SERVER_HOST: server
+      TZ: Asia/Tokyo
+
+  mysql:
+    image: mysql
+    command:
+      - --character-set-server=utf8
+    environment:
+      MYSQL_ALLOW_EMPTY_PASSWORD: 1
+      MYSQL_DATABASE: zabbix
+      MYSQL_USER: zabbix
+      MYSQL_PASSWORD: secret
+      TZ: Asia/Tokyo
+    volumes:
+      - ~/work/zabbix/mysql:/var/lib/mysql:rw
+
