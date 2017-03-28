@@ -1,0 +1,4 @@
+# snmptrapd command line options
+# '-f' is implicitly added by snmptrapd systemd unit file
+# OPTIONS="-Lsd"
+# OPTIONS="-Lf /var/log/snmptrapd.log -n -a -A"
